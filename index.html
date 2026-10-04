@@ -3,67 +3,281 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Warung GS - Portal</title>
+  <title>Warung GS - Christmas & Food Parcel</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4 font-sans">
+<body class="bg-amber-50/30 text-slate-800 min-h-screen flex flex-col font-sans">
 
-  <div class="max-w-md w-full bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 p-6 text-center">
-    <!-- Header -->
-    <div class="mb-6">
-      <div class="inline-flex items-center justify-center w-16 h-16 bg-red-800/30 text-red-500 rounded-full mb-3 border border-red-700/50">
-        <i class="fa-solid fa-store text-2xl"></i>
+  <!-- Header -->
+  <header class="bg-red-800 text-white shadow-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-gift text-2xl text-amber-300"></i>
+        <h1 class="text-xl font-bold font-serif tracking-wide">Warung GS</h1>
       </div>
-      <h1 class="text-2xl font-bold font-serif text-slate-100">Warung GS Store Hub</h1>
-      <p class="text-xs text-slate-400 mt-1">Select a destination below to proceed</p>
-    </div>
-
-    <!-- Navigation Buttons -->
-    <div class="space-y-3">
-      <!-- Public Storefront Link -->
-      <button onclick="navigateTo('index')" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white p-4 rounded-xl font-bold shadow-lg transition flex items-center justify-between group">
-        <div class="flex items-center space-x-3">
-          <i class="fa-solid fa-basket-shopping text-xl group-hover:scale-110 transition-transform"></i>
-          <span class="text-base">Customer Storefront</span>
-        </div>
-        <i class="fa-solid fa-arrow-right text-sm text-emerald-300"></i>
-      </button>
-
-      <!-- Admin CMS Link -->
-      <button onclick="navigateTo('login')" class="w-full bg-slate-700 hover:bg-slate-600 text-white p-4 rounded-xl font-bold border border-slate-600 transition flex items-center justify-between group">
-        <div class="flex items-center space-x-3">
-          <i class="fa-solid fa-user-shield text-xl text-yellow-400 group-hover:scale-110 transition-transform"></i>
-          <span class="text-base">Admin Dashboard</span>
-        </div>
-        <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+      <button onclick="toggleCartModal()" class="relative bg-red-900 hover:bg-red-950 text-white px-4 py-2 rounded-full font-medium transition flex items-center space-x-2">
+        <i class="fa-solid fa-cart-shopping text-amber-300"></i>
+        <span>Keranjang</span>
+        <span id="cartCount" class="bg-amber-400 text-red-950 text-xs font-extrabold px-2 py-0.5 rounded-full hidden">0</span>
       </button>
     </div>
+  </header>
 
-    <!-- Quick Link Info -->
-    <div class="mt-6 pt-4 border-t border-slate-700/60 text-xs text-slate-400">
-      <p><i class="fa-solid fa-link mr-1 text-slate-500"></i> Shortcut: Append <code class="text-amber-400 font-mono">#cms</code> or <code class="text-amber-400 font-mono">#admin</code> to your URL to open Admin Login directly.</p>
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
+    <!-- Banner -->
+    <div class="bg-gradient-to-r from-red-800 to-red-900 rounded-2xl p-6 md:p-10 text-white mb-8 shadow-lg flex flex-col md:flex-row items-center justify-between">
+      <div class="mb-4 md:mb-0">
+        <span class="bg-amber-400/20 text-amber-300 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full border border-amber-400/30">Festive Season</span>
+        <h2 class="text-2xl md:text-4xl font-serif font-bold mt-2">Special Food & Christmas Parcel</h2>
+        <p class="text-red-100 text-sm md:text-base mt-1">Pesan hantaran lezat & parcel Natal eksklusif langsung ke penerima.</p>
+      </div>
+    </div>
+
+    <!-- Product Grid Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold font-serif text-slate-800 flex items-center">
+        <i class="fa-solid fa-utensils text-red-800 mr-2"></i> Daftar Produk
+      </h3>
+    </div>
+
+    <!-- Products Container -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Loading State -->
+      <div class="col-span-full text-center py-12">
+        <i class="fa-solid fa-circle-notch fa-spin text-3xl text-red-800 mb-3"></i>
+        <p class="text-slate-500 text-sm">Memuat katalog produk...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cart Modal -->
+  <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-end hidden transition-opacity">
+    <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col">
+      <div class="bg-red-800 text-white p-4 flex justify-between items-center">
+        <h3 class="font-bold font-serif text-lg flex items-center">
+          <i class="fa-solid fa-cart-shopping mr-2 text-amber-300"></i> Keranjang Belanja
+        </h3>
+        <button onclick="toggleCartModal()" class="text-white hover:text-amber-200 text-xl">&times;</button>
+      </div>
+
+      <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Cart items populated via JavaScript -->
+      </div>
+
+      <div class="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
+        <div class="flex justify-between items-center text-slate-700">
+          <span class="font-medium">Total Pembayaran:</span>
+          <span id="cartTotal" class="font-bold text-red-800 text-lg">Rp 0</span>
+        </div>
+
+        <form id="checkoutForm" onsubmit="submitOrder(event)" class="space-y-3 pt-2 border-t border-slate-200">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label>
+            <input type="text" id="buyerName" required placeholder="Contoh: Budi Santoso" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-red-800 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor WhatsApp</label>
+            <input type="tel" id="buyerWa" required placeholder="Contoh: 081234567890" class="w-full text-sm border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-red-800 focus:outline-none">
+          </div>
+          <button type="submit" id="btnSubmitOrder" class="w-full bg-red-800 hover:bg-red-900 text-white py-2.5 rounded-lg font-bold text-sm transition shadow-md flex justify-center items-center">
+            <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Pesanan
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs mt-auto">
+    <p>&copy; Warung GS. All rights reserved.</p>
+    <!-- Shortcut to Apps Script Admin CMS -->
+    <a id="adminLink" href="#" target="_blank" class="text-slate-600 hover:text-slate-400 mt-2 inline-block text-[11px] underline">
+      <i class="fa-solid fa-lock mr-1"></i> Admin Portal
+    </a>
+  </footer>
+
   <script>
-    // ⚠️ REPLACE THIS WITH YOUR EXACT GOOGLE APPS SCRIPT WEB APP DEPLOYMENT URL
+    // ⚠️ REPLACE THIS WITH YOUR EXACT GOOGLE APPS SCRIPT WEB APP EXECUTION URL
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXNmNQZrMbPednDQDra9ojo8bbuUPyqA7O2W5gMO8dkgRbRTmsCk-TtkzDSuTk44tyng/exec";
 
-    // Hash handling: Automatically redirect if #cms or #admin is added to the URL
-    window.addEventListener('DOMContentLoaded', () => {
-      const hash = window.location.hash.toLowerCase();
-      if (hash === '#cms' || hash === '#admin') {
-        navigateTo('login');
-      }
-    });
+    let products = [];
+    let cart = [];
 
-    function navigateTo(pageName) {
-      if (GAS_WEB_APP_URL.includes("YOUR_EXECUTION_ID_HERE")) {
-        alert("Please set your GAS_WEB_APP_URL inside this index.html file first!");
+    // Redirect handler for Admin URL shortcut
+    document.getElementById('adminLink').href = `${GAS_WEB_APP_URL}?page=login`;
+
+    // Direct redirection if #cms or #admin is attached to your GitHub Pages URL
+    if (window.location.hash.toLowerCase() === '#cms' || window.location.hash.toLowerCase() === '#admin') {
+      window.location.href = `${GAS_WEB_APP_URL}?page=login`;
+    }
+
+    // Load products on start
+    document.addEventListener('DOMContentLoaded', fetchProducts);
+
+    function fetchProducts() {
+      fetch(`${GAS_WEB_APP_URL}?action=getProducts`)
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === 'success') {
+            products = res.data;
+            renderProducts();
+          } else {
+            showError("Gagal mengambil data produk.");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          showError("Terjadi kesalahan jaringan.");
+        });
+    }
+
+    function renderProducts() {
+      const container = document.getElementById('productGrid');
+      if (products.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-center py-10 text-slate-400">Belum ada produk tersedia.</div>`;
         return;
       }
-      window.location.href = `${GAS_WEB_APP_URL}?page=${pageName}`;
+
+      container.innerHTML = products.map(prod => `
+        <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden flex flex-col justify-between hover:shadow-lg transition">
+          <div>
+            <div class="bg-slate-50 w-full overflow-hidden flex items-center justify-center">
+              <img src="${prod.url_foto || 'https://via.placeholder.com/300x200?text=Warung+GS'}" alt="${prod.nama_produk}" class="w-full h-56 object-contain">
+            </div>
+            <div class="p-4">
+              <h4 class="font-bold text-lg text-slate-800 font-serif mb-1">${prod.nama_produk}</h4>
+              <p class="text-slate-600 text-sm mb-3 line-clamp-2">${prod.deskripsi || ''}</p>
+            </div>
+          </div>
+          <div class="p-4 pt-0 flex items-center justify-between">
+            <span class="text-red-800 font-extrabold text-base">Rp ${Number(prod.harga).toLocaleString()}</span>
+            <button onclick="addToCart('${prod.id_produk}')" class="bg-red-800 hover:bg-red-900 text-white px-3 py-1.5 rounded-md text-sm font-semibold transition flex items-center">
+              <i class="fa-solid fa-plus mr-1"></i> Add
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id_produk == productId);
+      if (!product) return;
+
+      const existingIndex = cart.findIndex(item => item.id_produk == productId);
+      if (existingIndex > -1) {
+        cart[existingIndex].qty += 1;
+      } else {
+        cart.push({
+          id_produk: product.id_produk,
+          nama_produk: product.nama_produk,
+          harga: Number(product.harga),
+          qty: 1
+        });
+      }
+      updateCartUI();
+    }
+
+    function updateCartQty(index, change) {
+      cart[index].qty += change;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const cartCountEl = document.getElementById('cartCount');
+      const cartItemsEl = document.getElementById('cartItems');
+      const cartTotalEl = document.getElementById('cartTotal');
+
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+
+      if (totalItems > 0) {
+        cartCountEl.textContent = totalItems;
+        cartCountEl.classList.remove('hidden');
+      } else {
+        cartCountEl.classList.add('hidden');
+      }
+
+      cartTotalEl.textContent = `Rp ${totalPrice.toLocaleString()}`;
+
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = `<p class="text-center text-slate-400 py-8 text-sm">Keranjang Anda masih kosong.</p>`;
+        return;
+      }
+
+      cartItemsEl.innerHTML = cart.map((item, index) => `
+        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+          <div class="flex-1 pr-2">
+            <p class="font-semibold text-sm text-slate-800">${item.nama_produk}</p>
+            <p class="text-xs text-red-800 font-bold">Rp ${(item.harga * item.qty).toLocaleString()}</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="updateCartQty(${index}, -1)" class="w-6 h-6 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center">-</button>
+            <span class="text-sm font-semibold w-4 text-center">${item.qty}</span>
+            <button onclick="updateCartQty(${index}, 1)" class="w-6 h-6 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleCartModal() {
+      const modal = document.getElementById('cartModal');
+      modal.classList.toggle('hidden');
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      if (cart.length === 0) {
+        alert("Keranjang belanja Anda masih kosong.");
+        return;
+      }
+
+      const btn = document.getElementById('btnSubmitOrder');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memproses...`;
+
+      const payload = {
+        action: 'createOrder',
+        nama_pembeli: document.getElementById('buyerName').value,
+        whatsapp_pembeli: document.getElementById('buyerWa').value,
+        item_pesanan: cart,
+        total_harga: cart.reduce((sum, item) => sum + (item.harga * item.qty), 0)
+      };
+
+      fetch(GAS_WEB_APP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success') {
+          alert('Pesanan berhasil dibuat! Terima kasih telah berbelanja.');
+          cart = [];
+          document.getElementById('checkoutForm').reset();
+          updateCartUI();
+          toggleCartModal();
+        } else {
+          alert('Gagal membuat pesanan. Silakan coba lagi.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Terjadi kesalahan saat membuat pesanan.');
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Kirim Pesanan`;
+      });
+    }
+
+    function showError(msg) {
+      document.getElementById('productGrid').innerHTML = `
+        <div class="col-span-full text-center py-10 text-red-600 font-semibold text-sm">
+          ${msg}
+        </div>`;
     }
   </script>
 </body>
