@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warung GS - Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4 font-sans">
+
+  <div class="max-w-md w-full bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 p-6 text-center">
+    <!-- Header -->
+    <div class="mb-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-red-800/30 text-red-500 rounded-full mb-3 border border-red-700/50">
+        <i class="fa-solid fa-store text-2xl"></i>
+      </div>
+      <h1 class="text-2xl font-bold font-serif text-slate-100">Warung GS Store Hub</h1>
+      <p class="text-xs text-slate-400 mt-1">Select a destination below to proceed</p>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="space-y-3">
+      <!-- Public Storefront Link -->
+      <button onclick="navigateTo('index')" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white p-4 rounded-xl font-bold shadow-lg transition flex items-center justify-between group">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-basket-shopping text-xl group-hover:scale-110 transition-transform"></i>
+          <span class="text-base">Customer Storefront</span>
+        </div>
+        <i class="fa-solid fa-arrow-right text-sm text-emerald-300"></i>
+      </button>
+
+      <!-- Admin CMS Link -->
+      <button onclick="navigateTo('login')" class="w-full bg-slate-700 hover:bg-slate-600 text-white p-4 rounded-xl font-bold border border-slate-600 transition flex items-center justify-between group">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-user-shield text-xl text-yellow-400 group-hover:scale-110 transition-transform"></i>
+          <span class="text-base">Admin Dashboard</span>
+        </div>
+        <i class="fa-solid fa-arrow-right text-sm text-slate-400"></i>
+      </button>
+    </div>
+
+    <!-- Quick Link Info -->
+    <div class="mt-6 pt-4 border-t border-slate-700/60 text-xs text-slate-400">
+      <p><i class="fa-solid fa-link mr-1 text-slate-500"></i> Shortcut: Append <code class="text-amber-400 font-mono">#cms</code> or <code class="text-amber-400 font-mono">#admin</code> to your URL to open Admin Login directly.</p>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ REPLACE THIS WITH YOUR EXACT GOOGLE APPS SCRIPT WEB APP DEPLOYMENT URL
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/YOUR_EXECUTION_ID_HERE/exec";
+
+    // Hash handling: Automatically redirect if #cms or #admin is added to the URL
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#cms' || hash === '#admin') {
+        navigateTo('login');
+      }
+    });
+
+    function navigateTo(pageName) {
+      if (GAS_WEB_APP_URL.includes("YOUR_EXECUTION_ID_HERE")) {
+        alert("Please set your GAS_WEB_APP_URL inside this index.html file first!");
+        return;
+      }
+      window.location.href = `${GAS_WEB_APP_URL}?page=${pageName}`;
+    }
+  </script>
+</body>
+</html>
