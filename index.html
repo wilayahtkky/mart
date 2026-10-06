@@ -9,19 +9,17 @@
 </head>
 <body class="bg-amber-50/30 text-slate-800 min-h-screen flex flex-col font-sans">
 
-  <!-- Header (Primary Red with Green & Yellow Accent Lines) -->
+  <!-- Header -->
   <header class="bg-red-800 text-white shadow-md sticky top-0 z-40 border-b-4 border-emerald-600">
     <div class="max-w-6xl mx-auto px-4 py-2.5 flex justify-between items-center">
-      <!-- Logo + Brand Title -->
       <div class="flex items-center space-x-3">
         <img id="headerLogo" src="https://lh3.googleusercontent.com/d/1ISr_6GgyfJnapTCme7yHsHkdQ3K22eVu" alt="DkkY MART Logo" class="h-[80px] w-auto object-contain bg-white rounded-full p-1 border-2 border-amber-400 shadow-sm">
         <div>
-          <h1 class="text-xl font-bold font-serif tracking-wide text-amber-300 leading-tight">DkkY MART - WA: 0851-7789-5527</h1>
+          <h1 class="text-xl font-bold font-serif tracking-wide text-amber-300 leading-tight">DkkY MART</h1>
           <p class="text-[10px] text-red-100 uppercase tracking-wider font-semibold">Food & Christmas Parcel</p>
         </div>
       </div>
 
-      <!-- Cart Button -->
       <button onclick="toggleCartModal()" class="relative bg-red-900 hover:bg-red-950 text-white px-4 py-2 rounded-full font-medium transition flex items-center space-x-2 border border-amber-400/50 shadow-inner">
         <i class="fa-solid fa-cart-shopping text-amber-300"></i>
         <span class="hidden sm:inline">Keranjang</span>
@@ -32,7 +30,6 @@
 
   <!-- Main Content -->
   <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
-    <!-- Hero Banner (Balanced Red-to-Green Gradient with Yellow Highlights) -->
     <div class="bg-gradient-to-r from-red-800 via-red-900 to-emerald-900 rounded-2xl p-6 md:p-8 text-white mb-8 shadow-xl border-2 border-amber-400 flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
       <div class="z-10 mb-4 md:mb-0">
         <span class="bg-amber-400 text-red-950 text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-sm">
@@ -50,22 +47,43 @@
       </div>
     </div>
 
-    <!-- Product Grid Header -->
     <div class="flex justify-between items-center mb-6 border-b-2 border-red-200 pb-2">
       <h3 class="text-xl font-bold font-serif text-red-900 flex items-center">
         <i class="fa-solid fa-utensils text-emerald-700 mr-2"></i> Menu Katalog Produk
       </h3>
     </div>
 
-    <!-- Products Container -->
+    <!-- Products Grid -->
     <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Loading State -->
       <div class="col-span-full text-center py-12">
         <i class="fa-solid fa-circle-notch fa-spin text-3xl text-red-800 mb-3"></i>
         <p class="text-slate-500 text-sm">Memuat katalog dkky MART...</p>
       </div>
     </div>
   </main>
+
+  <!-- Product Detail Pop-Up Modal -->
+  <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-200 relative flex flex-col max-h-[90vh]">
+      <button onclick="closeDetailModal()" class="absolute top-3 right-3 bg-slate-800/60 hover:bg-slate-900 text-white w-8 h-8 rounded-full font-bold flex items-center justify-center z-10">&times;</button>
+      
+      <div class="bg-slate-100 flex items-center justify-center p-4 border-b border-slate-200 max-h-64 overflow-hidden">
+        <img id="detailImage" src="" alt="" class="max-h-56 object-contain rounded">
+      </div>
+      
+      <div class="p-5 overflow-y-auto flex-1">
+        <h3 id="detailTitle" class="text-xl font-bold font-serif text-slate-900 mb-2"></h3>
+        <p id="detailPrice" class="text-red-800 font-black text-lg mb-3"></p>
+        <p id="detailDescription" class="text-slate-600 text-sm leading-relaxed whitespace-pre-line"></p>
+      </div>
+
+      <div class="p-4 bg-amber-50/50 border-t border-slate-200 flex justify-end">
+        <button id="detailAddToCartBtn" class="bg-red-800 hover:bg-red-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-md flex items-center">
+          <i class="fa-solid fa-plus mr-2"></i> Tambahkan ke Keranjang
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Cart Modal -->
   <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-end hidden transition-opacity">
@@ -77,9 +95,7 @@
         <button onclick="toggleCartModal()" class="text-white hover:text-amber-300 text-2xl font-bold">&times;</button>
       </div>
 
-      <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3">
-        <!-- Cart items populated via JavaScript -->
-      </div>
+      <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
 
       <div class="p-4 bg-amber-50/50 border-t border-slate-200 space-y-3">
         <div class="flex justify-between items-center text-slate-800">
@@ -111,37 +127,29 @@
       <span class="font-bold text-amber-300 font-serif text-sm">DkkY MART</span>
     </div>
     <p>&copy; DkkY MART. All rights reserved.</p>
-    <!-- Shortcut to Apps Script Admin CMS -->
     <a id="adminLink" href="#" target="_blank" class="text-slate-400 hover:text-amber-300 mt-3 inline-block text-[11px] underline">
       <i class="fa-solid fa-lock mr-1"></i> Admin Portal
     </a>
   </footer>
 
   <script>
-    // ⚠️ REPLACE THIS WITH YOUR EXACT GOOGLE APPS SCRIPT WEB APP EXECUTION URL
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXNmNQZrMbPednDQDra9ojo8bbuUPyqA7O2W5gMO8dkgRbRTmsCk-TtkzDSuTk44tyng/exec";
-
-    // ⚠️ Direct link to your hosted dkky MART logo
     const LOGO_URL = "https://lh3.googleusercontent.com/d/12NBe13PfzYLuLW0eY3nU4BoTIuDo7OY5";
 
     let products = [];
     let cart = [];
 
-    // Apply custom logo if provided
     if (LOGO_URL) {
       document.getElementById('headerLogo').src = LOGO_URL;
       document.getElementById('bannerLogo').src = LOGO_URL;
     }
 
-    // Redirect handler for Admin URL shortcut
     document.getElementById('adminLink').href = `${GAS_WEB_APP_URL}?page=login`;
 
-    // Direct redirection if #cms or #admin is attached to your GitHub Pages URL
     if (window.location.hash.toLowerCase() === '#cms' || window.location.hash.toLowerCase() === '#admin') {
       window.location.href = `${GAS_WEB_APP_URL}?page=login`;
     }
 
-    // Load products on start
     document.addEventListener('DOMContentLoaded', fetchProducts);
 
     function fetchProducts() {
@@ -170,12 +178,12 @@
 
       container.innerHTML = products.map(prod => `
         <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden flex flex-col justify-between hover:shadow-xl transition duration-200">
-          <div>
+          <div onclick="openDetailModal('${prod.id_produk}')" class="cursor-pointer group">
             <div class="bg-slate-50 w-full overflow-hidden flex items-center justify-center p-2 border-b border-slate-100">
-              <img src="${prod.url_foto || 'https://via.placeholder.com/300x200?text=dkky+MART'}" alt="${prod.nama_produk}" class="w-full h-56 object-contain">
+              <img src="${prod.url_foto || 'https://via.placeholder.com/300x200?text=dkky+MART'}" alt="${prod.nama_produk}" class="w-full h-56 object-contain group-hover:scale-105 transition duration-200">
             </div>
             <div class="p-4">
-              <h4 class="font-bold text-lg text-slate-900 font-serif mb-1">${prod.nama_produk}</h4>
+              <h4 class="font-bold text-lg text-slate-900 font-serif mb-1 group-hover:text-red-800 transition">${prod.nama_produk}</h4>
               <p class="text-slate-600 text-sm mb-3 line-clamp-3">${prod.deskripsi || ''}</p>
             </div>
           </div>
@@ -187,6 +195,28 @@
           </div>
         </div>
       `).join('');
+    }
+
+    function openDetailModal(productId) {
+      const product = products.find(p => p.id_produk == productId);
+      if (!product) return;
+
+      document.getElementById('detailImage').src = product.url_foto || 'https://via.placeholder.com/300x200?text=dkky+MART';
+      document.getElementById('detailTitle').textContent = product.nama_produk;
+      document.getElementById('detailPrice').textContent = `Rp ${Number(product.harga).toLocaleString()}`;
+      document.getElementById('detailDescription').textContent = product.deskripsi || 'Tidak ada deskripsi produk.';
+      
+      const btn = document.getElementById('detailAddToCartBtn');
+      btn.onclick = () => {
+        addToCart(product.id_produk);
+        closeDetailModal();
+      };
+
+      document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.add('hidden');
     }
 
     function addToCart(productId) {
